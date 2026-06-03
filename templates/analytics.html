@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics Dashboard{% endblock %}
+{% block header_title %}📊 Advanced Analytics Dashboard{% endblock %}
+
+{% block content %}
+<div class="analytics-dashboard">
+    <!-- Key Metrics Cards -->
+    <div class="metrics-grid">
+        <div class="metric-card primary">
+            <div class="metric-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="metric-content">
+                <h3>Total Predictions</h3>
+                <span class="metric-value" id="total-predictions">0</span>
+                <div class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i> +12% this week
+                </div>
+            </div>
+        </div>
+        
+        <div class="metric-card warning">
+            <div class="metric-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="metric-content">
+                <h3>Churn Rate</h3>
+                <span class="metric-value" id="churn-rate">0%</span>
+                <div class="metric-change negative">
+                    <i class="fas fa-arrow-down"></i> -3% this week
+                </div>
+            </div>
+        </div>
+        
+        <div class="metric-card success">
+            <div class="metric-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="metric-content">
+                <h3>Accuracy Score</h3>
+                <span class="metric-value">79.5%</span>
+                <div class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i> +2.1% improvement
+                </div>
+            </div>
+        </div>
+        
+        <div class="metric-card info">
+            <div class="metric-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="metric-content">
+                <h3>Avg. Response Time</h3>
+                <span class="metric-value">0.8s</span>
+                <div class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i> Optimized
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Charts Section -->
+    <div class="charts-section">
+        <div class="chart-row">
+            <div class="chart-card">
+                <h3>📈 Prediction Trends</h3>
+                <div class="chart-container">
+                    <canvas id="trendsChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <h3>🎯 Risk Distribution</h3>
+                <div class="chart-container">
+                    <canvas id="riskChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chart-row">
+            <div class="chart-card">
+                <h3>💰 Revenue Impact Analysis</h3>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <h3>👥 Customer Segments</h3>
+                <div class="chart-container">
+                    <canvas id="segmentChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Real-time Feed -->
+    <div class="realtime-section">
+        <div class="feed-card">
+            <h3>🔴 Live Prediction Feed</h3>
+            <div class="feed-container" id="live-feed">
+                <!-- Live feed items will be inserted here -->
+            </div>
+        </div>
+        
+        <div class="insights-card">
+            <h3>💡 AI Insights</h3>
+            <div class="insights-container" id="ai-insights">
+                <div class="insight-item">
+                    <i class="fas fa-lightbulb"></i>
+                    <p>Customers with month-to-month contracts are 3x more likely to churn</p>
+                </div>
+                <div class="insight-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <p>High monthly charges (> $90) correlate with increased churn risk</p>
+                </div>
+                <div class="insight-item">
+                    <i class="fas fa-users"></i>
+                    <p>Customers with partners show 23% lower churn rates</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize analytics dashboard
+    async function initAnalytics() {
+        try {
+            const response = await fetch('/api/analytics-data');
+            const data = await response.json();
+            
+            updateMetrics(data);
+            createCharts(data);
+            startLiveFeed();
+        } catch (error) {
+            console.error('Error loading analytics:', error);
+        }
+    }
+
+    function updateMetrics(data) {
+        document.getElementById('total-predictions').textContent = data.totalPredictions || 0;
+        document.getElementById('churn-rate').textContent = data.churnRate || '0%';
+    }
+
+    function createCharts(data) {
+        // Trends Chart
+        const trendsCtx = document.getElementById('trendsChart').getContext('2d');
+        new Chart(trendsCtx, {
+            type: 'line',
+            data: {
+                labels: data.trendLabels || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Predictions',
+                    data: data.trendData || [12, 19, 15, 25, 22, 30, 28],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Risk Distribution Chart
+        const riskCtx = document.getElementById('riskChart').getContext('2d');
+        new Chart(riskCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Low Risk', 'Medium Risk', 'High Risk', 'Critical'],
+                datasets: [{
+                    data: data.riskData || [45, 30, 20, 5],
+                    backgroundColor: ['#48dbfb', '#feca57', '#ff9ff3', '#ff6b6b']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Revenue Impact Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Retained', 'At Risk', 'Lost'],
+                datasets: [{
+                    label: 'Monthly Revenue ($)',
+                    data: data.revenueData || [15000, 8000, 3000],
+                    backgroundColor: ['#00d2d3', '#feca57', '#ff6b6b']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { 
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Customer Segments Chart
+        const segmentCtx = document.getElementById('segmentChart').getContext('2d');
+        new Chart(segmentCtx, {
+            type: 'radar',
+            data: {
+                labels: ['New', 'Regular', 'Premium', 'VIP', 'At Risk'],
+                datasets: [{
+                    label: 'Current Month',
+                    data: data.segmentData || [65, 75, 90, 85, 40],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.2)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
+
+    function startLiveFeed() {
+        const feedContainer = document.getElementById('live-feed');
+        const sampleActivities = [
+            { type: 'prediction', message: 'New prediction: High risk customer detected', time: 'Just now' },
+            { type: 'alert', message: 'Churn rate increased by 5% today', time: '2 min ago' },
+            { type: 'success', message: 'Model accuracy improved to 79.5%', time: '5 min ago' },
+            { type: 'info', message: '10 new predictions this hour', time: '8 min ago' }
+        ];
+
+        function addFeedItem(item) {
+            const feedItem = document.createElement('div');
+            feedItem.className = `feed-item ${item.type}`;
+            feedItem.innerHTML = `
+                <div class="feed-icon">
+                    <i class="fas fa-${getFeedIcon(item.type)}"></i>
+                </div>
+                <div class="feed-content">
+                    <p>${item.message}</p>
+                    <span class="feed-time">${item.time}</span>
+                </div>
+            `;
+            
+            feedContainer.insertBefore(feedItem, feedContainer.firstChild);
+            
+            // Keep only last 10 items
+            while (feedContainer.children.length > 10) {
+                feedContainer.removeChild(feedContainer.lastChild);
+            }
+        }
+
+        function getFeedIcon(type) {
+            const icons = {
+                'prediction': 'chart-line',
+                'alert': 'exclamation-triangle',
+                'success': 'check-circle',
+                'info': 'info-circle'
+            };
+            return icons[type] || 'info-circle';
+        }
+
+        // Add initial items
+        sampleActivities.forEach(addFeedItem);
+
+        // Simulate live updates
+        setInterval(() => {
+            const randomItem = sampleActivities[Math.floor(Math.random() * sampleActivities.length)];
+            addFeedItem({
+                ...randomItem,
+                time: 'Just now'
+            });
+        }, 10000);
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initAnalytics);
+</script>
+{% endblock %}

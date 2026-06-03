@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+
+{% block title %}Customer Segmentation{% endblock %}
+{% block header_title %}👥 Customer Segmentation Analysis{% endblock %}
+
+{% block content %}
+<div class="segmentation-dashboard">
+    <!-- Segmentation Controls -->
+    <div class="controls-card">
+        <h3>🎯 Segmentation Parameters</h3>
+        <div class="control-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Segmentation Type</label>
+                    <select id="segment-type" onchange="updateSegmentation()">
+                        <option value="value">Value-Based</option>
+                        <option value="behavior">Behavioral</option>
+                        <option value="risk">Risk-Based</option>
+                        <option value="demographic">Demographic</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Number of Segments</label>
+                    <select id="segment-count" onchange="updateSegmentation()">
+                        <option value="3">3 Segments</option>
+                        <option value="4" selected>4 Segments</option>
+                        <option value="5">5 Segments</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Time Period</label>
+                    <select id="time-period" onchange="updateSegmentation()">
+                        <option value="7">Last 7 Days</option>
+                        <option value="30" selected>Last 30 Days</option>
+                        <option value="90">Last 90 Days</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Segments Overview -->
+    <div class="segments-grid" id="segments-grid">
+        <!-- Segments will be dynamically loaded here -->
+    </div>
+
+    <!-- Detailed Analysis -->
+    <div class="analysis-section">
+        <div class="analysis-card">
+            <h3>📊 Segment Comparison</h3>
+            <div class="chart-container">
+                <canvas id="segmentComparisonChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="analysis-card">
+            <h3>🎯 Segment Characteristics</h3>
+            <div class="characteristics-table" id="characteristics-table">
+                <!-- Table will be dynamically loaded -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommendations -->
+    <div class="recommendations-card">
+        <h3>💡 Segment-Specific Recommendations</h3>
+        <div class="recommendations-grid" id="recommendations-grid">
+            <!-- Recommendations will be dynamically loaded -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // Segment data and configurations
+    const segmentProfiles = {
+        value: {
+            segments: [
+                {
+                    name: 'Premium Champions',
+                    size: 15,
+                    color: '#667eea',
+                    icon: 'crown',
+                    description: 'High-value, loyal customers',
+                    characteristics: {
+                        avgMonthlySpend: '$120+',
+                        tenure: '24+ months',
+                        churnRisk: 'Low (5%)',
+                        satisfaction: 'Very High'
+                    },
+                    recommendations: [
+                        'Offer exclusive VIP benefits',
+                        'Provide priority support',
+                        'Create loyalty rewards program'
+                    ]
+                },
+                {
+                    name: 'Stable Regulars',
+                    size: 35,
+                    color: '#48dbfb',
+                    icon: 'user-check',
+                    description: 'Consistent, reliable customers',
+                    characteristics: {
+                        avgMonthlySpend: '$60-90',
+                        tenure: '12-24 months',
+                        churnRisk: 'Medium (15%)',
+                        satisfaction: 'High'
+                    },
+                    recommendations: [
+                        'Upsell premium features',
+                        'Bundle service packages',
+                        'Referral program incentives'
+                    ]
+                },
+                {
+                    name: 'Growth Potential',
+                    size: 30,
+                    color: '#feca57',
+                    icon: 'chart-line',
+                    description: 'Customers with growth potential',
+                    characteristics: {
+                        avgMonthlySpend: '$40-60',
+                        tenure: '6-12 months',
+                        churnRisk: 'Medium (25%)',
+                        satisfaction: 'Good'
+                    },
+                    recommendations: [
+                        'Targeted upgrade campaigns',
+                        'Feature education programs',
+                        'Personalized onboarding'
+                    ]
+                },
+                {
+                    name: 'At Risk',
+                    size: 20,
+                    color: '#ff6b6b',
+                    icon: 'exclamation-triangle',
+                    description: 'High risk of churn',
+                    characteristics: {
+                        avgMonthlySpend: '$20-40',
+                        tenure: '< 6 months',
+                        churnRisk: 'High (45%)',
+                        satisfaction: 'Low'
+                    },
+                    recommendations: [
+                        'Intervention campaigns',
+                        'Special retention offers',
+                        'Service improvement feedback'
+                    ]
+                }
+            ]
+        },
+        behavior: {
+            segments: [
+                {
+                    name: 'Power Users',
+                    size: 20,
+                    color: '#00d2d3',
+                    icon: 'rocket',
+                    description: 'Heavy service users',
+                    characteristics: {
+                        usageFrequency: 'Daily',
+                        featuresUsed: '8+',
+                        engagement: 'Very High',
+                        supportTickets: 'Few'
+                    },
+                    recommendations: [
+                        'Beta testing opportunities',
+                        'Advanced feature access',
+                        'Community leadership roles'
+                    ]
+                },
+                {
+                    name: 'Regular Users',
+                    size: 45,
+                    color: '#54a0ff',
+                    icon: 'user',
+                    description: 'Consistent usage patterns',
+                    characteristics: {
+                        usageFrequency: 'Weekly',
+                        featuresUsed: '4-6',
+                        engagement: 'Good',
+                        supportTickets: 'Moderate'
+                    },
+                    recommendations: [
+                        'Usage optimization tips',
+                        'Feature discovery campaigns',
+                        'Regular check-ins'
+                    ]
+                },
+                {
+                    name: 'Casual Users',
+                    size: 25,
+                    color: '#feca57',
+                    icon: 'clock',
+                    description: 'Infrequent but engaged',
+                    characteristics: {
+                        usageFrequency: 'Monthly',
+                        featuresUsed: '2-3',
+                        engagement: 'Low',
+                        supportTickets: 'Few'
+                    },
+                    recommendations: [
+                        'Re-engagement campaigns',
+                        'Simplified feature set',
+                        'Usage reminders'
+                    ]
+                },
+                {
+                    name: 'Dormant Users',
+                    size: 10,
+                    color: '#ff6b6b',
+                    icon: 'moon',
+                    description: 'Inactive customers',
+                    characteristics: {
+                        usageFrequency: 'Rarely',
+                        featuresUsed: '0-1',
+                        engagement: 'Very Low',
+                        supportTickets: 'None'
+                    },
+                    recommendations: [
+                        'Win-back campaigns',
+                        'Service re-education',
+                        'Special reactivation offers'
+                    ]
+                }
+            ]
+        }
+    };
+
+    function updateSegmentation() {
+        const type = document.getElementById('segment-type').value;
+        const segments = segmentProfiles[type] || segmentProfiles.value;
+        
+        renderSegments(segments.segments);
+        renderComparisonChart(segments.segments);
+        renderCharacteristicsTable(segments.segments);
+        renderRecommendations(segments.segments);
+    }
+
+    function renderSegments(segments) {
+        const grid = document.getElementById('segments-grid');
+        grid.innerHTML = segments.map(segment => `
+            <div class="segment-card" style="border-color: ${segment.color}">
+                <div class="segment-header">
+                    <div class="segment-icon" style="background: ${segment.color}">
+                        <i class="fas fa-${segment.icon}"></i>
+                    </div>
+                    <div class="segment-info">
+                        <h4>${segment.name}</h4>
+                        <p>${segment.description}</p>
+                    </div>
+                </div>
+                <div class="segment-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Size</span>
+                        <span class="stat-value">${segment.size}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${segment.size}%; background: ${segment.color}"></div>
+                    </div>
+                </div>
+                <div class="segment-details">
+                    ${Object.entries(segment.characteristics).map(([key, value]) => `
+                        <div class="detail-item">
+                            <span class="detail-label">${formatLabel(key)}:</span>
+                            <span class="detail-value">${value}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderComparisonChart(segments) {
+        const ctx = document.getElementById('segmentComparisonChart').getContext('2d');
+        
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Value', 'Loyalty', 'Risk', 'Engagement', 'Growth Potential'],
+                datasets: segments.map((segment, index) => ({
+                    label: segment.name,
+                    data: [
+                        Math.random() * 100,
+                        Math.random() * 100,
+                        Math.random() * 100,
+                        Math.random() * 100,
+                        Math.random() * 100
+                    ],
+                    borderColor: segment.color,
+                    backgroundColor: segment.color + '33'
+                }))
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
+
+    function renderCharacteristicsTable(segments) {
+        const table = document.getElementById('characteristics-table');
+        const characteristics = Object.keys(segments[0].characteristics);
+        
+        table.innerHTML = `
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Characteristic</th>
+                        ${segments.map(s => `<th>${s.name}</th>`).join('')}
+                    </tr>
+                </thead>
+                <tbody>
+                    ${characteristics.map(char => `
+                        <tr>
+                            <td><strong>${formatLabel(char)}</strong></td>
+                            ${segments.map(s => `<td>${s.characteristics[char]}</td>`).join('')}
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+    }
+
+    function renderRecommendations(segments) {
+        const grid = document.getElementById('recommendations-grid');
+        grid.innerHTML = segments.map(segment => `
+            <div class="recommendation-card">
+                <h4 style="color: ${segment.color}">
+                    <i class="fas fa-${segment.icon}"></i> ${segment.name}
+                </h4>
+                <ul>
+                    ${segment.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                </ul>
+            </div>
+        `).join('');
+    }
+
+    function formatLabel(key) {
+        return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        updateSegmentation();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,371 @@
+{% extends "base.html" %}
+
+{% block title %}Predictive Insights{% endblock %}
+{% block header_title %}🧠 AI-Powered Insights & Recommendations{% endblock %}
+
+{% block content %}
+<div class="insights-dashboard">
+    <!-- AI Insights Header -->
+    <div class="insights-header">
+        <div class="ai-status">
+            <div class="status-indicator active"></div>
+            <span>AI Engine Active</span>
+        </div>
+        <div class="last-updated">
+            <i class="fas fa-clock"></i>
+            Last updated: <span id="last-update">Just now</span>
+        </div>
+    </div>
+
+    <!-- Key Insights Cards -->
+    <div class="insights-grid">
+        <div class="insight-card critical">
+            <div class="insight-header">
+                <div class="insight-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="insight-meta">
+                    <span class="insight-type">Critical Alert</span>
+                    <span class="insight-time">2 hours ago</span>
+                </div>
+            </div>
+            <div class="insight-content">
+                <h4>Churn Risk Spike Detected</h4>
+                <p>Month-to-month contract customers show 34% higher churn risk this week. Immediate intervention recommended.</p>
+                <div class="insight-impact">
+                    <span class="impact-label">Potential Revenue Loss:</span>
+                    <span class="impact-value">$12,500/month</span>
+                </div>
+            </div>
+            <div class="insight-actions">
+                <button class="btn-primary" onclick="takeAction('intervention')">
+                    <i class="fas fa-bolt"></i> Take Action
+                </button>
+                <button class="btn-secondary" onclick="viewDetails('churn-spike')">
+                    View Details
+                </button>
+            </div>
+        </div>
+
+        <div class="insight-card warning">
+            <div class="insight-header">
+                <div class="insight-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="insight-meta">
+                    <span class="insight-type">Trend Analysis</span>
+                    <span class="insight-time">5 hours ago</span>
+                </div>
+            </div>
+            <div class="insight-content">
+                <h4>Revenue Optimization Opportunity</h4>
+                <p>Customers with monthly charges $80-100 show high satisfaction but low plan upgrades. 45% are eligible for premium plans.</p>
+                <div class="insight-impact">
+                    <span class="impact-label">Potential Revenue Gain:</span>
+                    <span class="impact-value">$8,200/month</span>
+                </div>
+            </div>
+            <div class="insight-actions">
+                <button class="btn-primary" onclick="takeAction('upgrade-campaign')">
+                    <i class="fas fa-rocket"></i> Launch Campaign
+                </button>
+                <button class="btn-secondary" onclick="viewDetails('revenue-opp')">
+                    View Details
+                </button>
+            </div>
+        </div>
+
+        <div class="insight-card success">
+            <div class="insight-header">
+                <div class="insight-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="insight-meta">
+                    <span class="insight-type">Success Pattern</span>
+                    <span class="insight-time">1 day ago</span>
+                </div>
+            </div>
+            <div class="insight-content">
+                <h4>High-Value Customer Pattern Identified</h4>
+                <p>Customers with partners + 2+ year tenure show 89% retention rate. This segment represents 22% of revenue.</p>
+                <div class="insight-impact">
+                    <span class="impact-label">Revenue Protected:</span>
+                    <span class="impact-value">$45,000/month</span>
+                </div>
+            </div>
+            <div class="insight-actions">
+                <button class="btn-primary" onclick="takeAction('expand-segment')">
+                    <i class="fas fa-expand"></i> Expand Segment
+                </button>
+                <button class="btn-secondary" onclick="viewDetails('success-pattern')">
+                    View Details
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Predictive Scenarios -->
+    <div class="scenarios-section">
+        <div class="section-header">
+            <h3>🔮 Predictive Scenarios</h3>
+            <div class="scenario-controls">
+                <select id="time-horizon" onchange="updateScenarios()">
+                    <option value="30">Next 30 Days</option>
+                    <option value="90" selected>Next 90 Days</option>
+                    <option value="180">Next 180 Days</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="scenarios-grid">
+            <div class="scenario-card">
+                <h4>📈 Best Case Scenario</h4>
+                <div class="scenario-metrics">
+                    <div class="metric">
+                        <span class="metric-label">Churn Rate</span>
+                        <span class="metric-value positive">12%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Growth</span>
+                        <span class="metric-value positive">+18%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Customer Satisfaction</span>
+                        <span class="metric-value positive">92%</span>
+                    </div>
+                </div>
+                <div class="scenario-conditions">
+                    <h5>Required Actions:</h5>
+                    <ul>
+                        <li>Implement targeted retention campaigns</li>
+                        <li>Launch premium upgrade initiative</li>
+                        <li>Enhance customer support response time</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <h4>⚖️ Most Likely Scenario</h4>
+                <div class="scenario-metrics">
+                    <div class="metric">
+                        <span class="metric-label">Churn Rate</span>
+                        <span class="metric-value neutral">18%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Growth</span>
+                        <span class="metric-value neutral">+8%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Customer Satisfaction</span>
+                        <span class="metric-value neutral">85%</span>
+                    </div>
+                </div>
+                <div class="scenario-conditions">
+                    <h5>Expected Outcome:</h5>
+                    <ul>
+                        <li>Moderate improvement in retention</li>
+                        <li>Steady revenue growth</li>
+                        <li>Maintained service quality</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <h4>⚠️ Worst Case Scenario</h4>
+                <div class="scenario-metrics">
+                    <div class="metric">
+                        <span class="metric-label">Churn Rate</span>
+                        <span class="metric-value negative">28%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Growth</span>
+                        <span class="metric-value negative">-5%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Customer Satisfaction</span>
+                        <span class="metric-value negative">72%</span>
+                    </div>
+                </div>
+                <div class="scenario-conditions">
+                    <h5>Risk Factors:</h5>
+                    <ul>
+                        <li>Increased competition pressure</li>
+                        <li>Service quality degradation</li>
+                        <li>Economic downturn impact</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Recommendations -->
+    <div class="recommendations-section">
+        <div class="section-header">
+            <h3>🎯 AI-Generated Action Plan</h3>
+            <div class="priority-filter">
+                <button class="filter-btn active" onclick="filterRecommendations('all')">All</button>
+                <button class="filter-btn" onclick="filterRecommendations('high')">High Priority</button>
+                <button class="filter-btn" onclick="filterRecommendations('medium')">Medium Priority</button>
+                <button class="filter-btn" onclick="filterRecommendations('low')">Low Priority</button>
+            </div>
+        </div>
+
+        <div class="recommendations-list" id="recommendations-list">
+            <div class="recommendation-item high" data-priority="high">
+                <div class="recommendation-header">
+                    <div class="priority-badge high">High</div>
+                    <h4>Launch Emergency Retention Campaign</h4>
+                    <div class="recommendation-score">
+                        <span>Impact Score: 92/100</span>
+                    </div>
+                </div>
+                <p>Target 150 high-risk customers with personalized retention offers within 48 hours.</p>
+                <div class="recommendation-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Expected Impact:</span>
+                        <span class="detail-value">Reduce churn by 15%</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Cost:</span>
+                        <span class="detail-value">$3,500 campaign budget</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Timeline:</span>
+                        <span class="detail-value">2 weeks</span>
+                    </div>
+                </div>
+                <div class="recommendation-actions">
+                    <button class="btn-primary" onclick="implementAction('retention-campaign')">
+                        <i class="fas fa-play"></i> Implement
+                    </button>
+                    <button class="btn-secondary" onclick="scheduleAction('retention-campaign')">
+                        <i class="fas fa-calendar"></i> Schedule
+                    </button>
+                </div>
+            </div>
+
+            <div class="recommendation-item medium" data-priority="medium">
+                <div class="recommendation-header">
+                    <div class="priority-badge medium">Medium</div>
+                    <h4>Optimize Pricing Structure</h4>
+                    <div class="recommendation-score">
+                        <span>Impact Score: 78/100</span>
+                    </div>
+                </div>
+                <p>Adjust pricing tiers based on customer value analysis to maximize revenue while maintaining satisfaction.</p>
+                <div class="recommendation-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Expected Impact:</span>
+                        <span class="detail-value">Increase ARPU by 12%</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Cost:</span>
+                        <span class="detail-value">Analysis time only</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Timeline:</span>
+                        <span class="detail-value">4-6 weeks</span>
+                    </div>
+                </div>
+                <div class="recommendation-actions">
+                    <button class="btn-primary" onclick="implementAction('pricing-optimization')">
+                        <i class="fas fa-play"></i> Implement
+                    </button>
+                    <button class="btn-secondary" onclick="scheduleAction('pricing-optimization')">
+                        <i class="fas fa-calendar"></i> Schedule
+                    </button>
+                </div>
+            </div>
+
+            <div class="recommendation-item low" data-priority="low">
+                <div class="recommendation-header">
+                    <div class="priority-badge low">Low</div>
+                    <h4>Enhance Customer Onboarding</h4>
+                    <div class="recommendation-score">
+                        <span>Impact Score: 65/100</span>
+                    </div>
+                </div>
+                <p>Improve new customer onboarding experience with personalized tutorials and check-ins.</p>
+                <div class="recommendation-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Expected Impact:</span>
+                        <span class="detail-value">Improve 30-day retention by 8%</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Cost:</span>
+                        <span class="detail-value">$1,200 development</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Timeline:</span>
+                        <span class="detail-value">8 weeks</span>
+                    </div>
+                </div>
+                <div class="recommendation-actions">
+                    <button class="btn-primary" onclick="implementAction('onboarding-enhancement')">
+                        <i class="fas fa-play"></i> Implement
+                    </button>
+                    <button class="btn-secondary" onclick="scheduleAction('onboarding-enhancement')">
+                        <i class="fas fa-calendar"></i> Schedule
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateScenarios() {
+        const horizon = document.getElementById('time-horizon').value;
+        // Update scenarios based on time horizon
+        console.log('Updating scenarios for', horizon, 'days');
+    }
+
+    function filterRecommendations(priority) {
+        const items = document.querySelectorAll('.recommendation-item');
+        const buttons = document.querySelectorAll('.filter-btn');
+        
+        // Update button states
+        buttons.forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        // Filter items
+        items.forEach(item => {
+            if (priority === 'all' || item.dataset.priority === priority) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    function takeAction(actionType) {
+        alert(`Implementing ${actionType} action...`);
+        // Here you would typically make an API call or navigate to action page
+    }
+
+    function viewDetails(detailType) {
+        alert(`Viewing details for ${detailType}...`);
+        // Here you would typically show a modal or navigate to detail page
+    }
+
+    function implementAction(actionType) {
+        alert(`Starting implementation of ${actionType}...`);
+        // Here you would typically start the implementation process
+    }
+
+    function scheduleAction(actionType) {
+        alert(`Opening scheduler for ${actionType}...`);
+        // Here you would typically open a scheduling interface
+    }
+
+    // Simulate real-time updates
+    function updateLastUpdateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString();
+        document.getElementById('last-update').textContent = timeString;
+    }
+
+    // Update time every minute
+    setInterval(updateLastUpdateTime, 60000);
+</script>
+{% endblock %}

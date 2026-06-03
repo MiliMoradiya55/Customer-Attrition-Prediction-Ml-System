@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Churn Predictor{% endblock %}</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        {% if session.user_id %}
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>📊 ChurnApp</h2>
+                <p>Welcome, {{ session.username }}!</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard' %}active{% endif %}">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="{{ url_for('history') }}" class="{% if request.endpoint == 'history' %}active{% endif %}">
+                    <i class="fas fa-history"></i> History
+                </a>
+                <a href="{{ url_for('about') }}" class="{% if request.endpoint == 'about' %}active{% endif %}">
+                    <i class="fas fa-info-circle"></i> About
+                </a>
+                <a href="{{ url_for('logout') }}">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </aside>
+        {% endif %}
+        
+        <main class="main-content">
+           
+            <header class="page-header">
+                <div class="header-title">
+                    <h1>{% block header_title %}Customer Churn Prediction{% endblock %}</h1>
+                </div>
+                <div class="header-user">
+                    {% if session.user_id %}
+                    <i class="fas fa-user-circle"></i>
+                    <span>{{ session.username }}</span>
+                    {% endif %}
+                </div>
+            </header>
+
+            <!-- Main content block -->
+            {% block content %}{% endblock %}
+
+            <footer class="professional-footer glass-footer">
+    <div class="footer-container">
+        <div class="footer-column">
+            <h3>📊 ChurnApp</h3>
+            <p>Predict customer churn with machine learning. Secure, fast, and insightful.</p>
+            <p><i class="fas fa-envelope"></i> support@churnapp.com</p>
+            <p><i class="fas fa-phone"></i> +1 (800) 123-4567</p>
+        </div>
+        <div class="footer-column">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('history') }}">History</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Follow Us</h4>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+            <h4 style="margin-top: 20px;">Newsletter</h4>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Your email" required>
+                <button type="submit"><i class="fas fa-paper-plane"></i></button>
+            </form>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 Customer Churn Prediction System. All rights reserved.</p>
+    </div>
+</footer>
+
+        </main>
+    </div>
+</body>
+</html>

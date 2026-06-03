@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Churn Predictor{% endblock %}
+
+{% block content %}
+<div class="landing">
+    <div class="hero">
+        <h1>🔮 Customer Churn Prediction</h1>
+        <p>Predict which customers are likely to leave using machine learning.</p>
+        <div class="cta-buttons">
+            <a href="{{ url_for('signup') }}" class="btn-primary">Get Started</a>
+            <a href="{{ url_for('login') }}" class="btn-secondary">Login</a>
+        </div>
+    </div>
+    <div class="features">
+        <div class="feature-card">
+            <h3>🤖 ML-Powered</h3>
+            <p>Random Forest model trained on customer data for accurate churn prediction.</p>
+        </div>
+        <div class="feature-card">
+            <h3>📊 Interactive Dashboard</h3>
+            <p>Real-time predictions with progress bar and visual charts.</p>
+        </div>
+        <div class="feature-card">
+            <h3>🔒 Secure & Personal</h3>
+            <p>User accounts with hashed passwords, each user sees only their own data.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

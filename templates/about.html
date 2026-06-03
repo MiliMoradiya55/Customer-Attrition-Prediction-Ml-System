@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}About Project{% endblock %}
+
+{% block content %}
+<div class="about-page">
+    <!-- Hero Section -->
+    <div class="about-hero">
+        <h1><i class="fas fa-robot"></i> Customer Churn Prediction</h1>
+        <p>Final Year Project • B.Tech Computer Science • 2026</p>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-number">95%</span>
+                <span class="stat-label">Model Accuracy</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">2000+</span>
+                <span class="stat-label">Synthetic Records</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">10</span>
+                <span class="stat-label">Features</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Overview -->
+    <div class="about-card">
+        <h2><i class="fas fa-lightbulb"></i> Project Overview</h2>
+        <p>This system predicts customer churn for subscription-based businesses using machine learning. It provides an interactive web interface where users can input customer data and receive instant predictions with visual analytics. All predictions are stored in a database and can be exported for further analysis.</p>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="features-grid">
+        <div class="feature-item">
+            <i class="fas fa-user-lock"></i>
+            <h3>Secure Authentication</h3>
+            <p>Signup/login with password hashing – each user sees only their own data.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-brain"></i>
+            <h3>ML Model</h3>
+            <p>Random Forest classifier trained on synthetic customer data with 95% accuracy.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-chart-pie"></i>
+            <h3>Interactive Charts</h3>
+            <p>Real-time pie chart and probability histogram using Chart.js.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-database"></i>
+            <h3>SQLite Database</h3>
+            <p>All predictions stored permanently with user association.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-download"></i>
+            <h3>Export to CSV</h3>
+            <p>Download your prediction history for offline analysis.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-mobile-alt"></i>
+            <h3>Responsive UI</h3>
+            <p>Modern gradient design, works on desktop and mobile.</p>
+        </div>
+    </div>
+
+    <!-- Tech Stack -->
+    <div class="about-card">
+        <h2><i class="fas fa-cogs"></i> Technology Stack</h2>
+        <div class="tech-stack">
+            <div class="tech-item">
+                <i class="fab fa-python"></i>
+                <span>Flask (Python)</span>
+            </div>
+            <div class="tech-item">
+                <i class="fas fa-database"></i>
+                <span>SQLAlchemy + SQLite</span>
+            </div>
+            <div class="tech-item">
+                <i class="fas fa-chart-bar"></i>
+                <span>scikit-learn / pandas / numpy</span>
+            </div>
+            <div class="tech-item">
+                <i class="fab fa-html5"></i>
+                <span>HTML5 / CSS3</span>
+            </div>
+            <div class="tech-item">
+                <i class="fab fa-js"></i>
+                <span>JavaScript / Chart.js</span>
+            </div>
+            <div class="tech-item">
+                <i class="fas fa-lock"></i>
+                <span>Werkzeug (hashing)</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

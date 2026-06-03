@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction History{% endblock %}
+
+{% block content %}
+<div class="history">
+    <h1 class="page-title">📜 Prediction History</h1>
+    
+    <div class="card">
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+            <a href="{{ url_for('export') }}" class="btn-primary">Export to CSV</a>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Timestamp</th>
+                    <th>Tenure</th>
+                    <th>Monthly Charges</th>
+                    <th>Total Charges</th>
+                    <th>Contract</th>
+                    <th>Payment Method</th>
+                    <th>Internet Service</th>
+                    <th>Senior</th>
+                    <th>Partner</th>
+                    <th>Dependents</th>
+                    <th>Prediction</th>
+                    <th>Probability</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pred in predictions %}
+                <tr>
+                    <td>{{ pred.id }}</td>
+                    <td>{{ pred.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ pred.tenure }}</td>
+                    <td>${{ "%.2f"|format(pred.monthly_charges) }}</td>
+                    <td>${{ "%.2f"|format(pred.total_charges) }}</td>
+                    <td>{{ pred.contract }}</td>
+                    <td>{{ pred.payment_method }}</td>
+                    <td>{{ pred.internet_service }}</td>
+                    <td>{{ 'Yes' if pred.senior_citizen else 'No' }}</td>
+                    <td>{{ 'Yes' if pred.partner else 'No' }}</td>
+                    <td>{{ 'Yes' if pred.dependents else 'No' }}</td>
+                    <td>
+                        <span class="badge {{ 'badge-churn' if pred.prediction == 1 else 'badge-nochurn' }}">
+                            {{ 'Churn' if pred.prediction == 1 else 'No Churn' }}
+                        </span>
+                    </td>
+                    <td>{{ "%.1f"|format(pred.probability * 100) }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
